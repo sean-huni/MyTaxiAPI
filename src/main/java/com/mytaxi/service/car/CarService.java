@@ -53,5 +53,7 @@ public interface CarService {
      * @param carStatus {@link CarStatus}
      * @return {@link List<CarDTO>}
      */
-    List<CarDTO> findAllCarsByStatus(CarStatus carStatus);
+    List<CarDTO> findAllCarsByStatus(CarStatus carStatus) throws EntityNotFoundException;
+
+    List<CarDTO> findCarCharacteristics(String licenceNo, String make, String model, Integer seatCount);
 }

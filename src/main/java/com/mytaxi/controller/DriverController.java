@@ -61,4 +61,13 @@ public class DriverController {
     public List<DriverDTO> findDrivers(@RequestParam OnlineStatus onlineStatus) {
         return DriverMapper.makeDriverDTOList(driverService.find(onlineStatus));
     }
+
+    @GetMapping("/find")
+    public List<DriverDTO> findLikeAsterisk(@RequestParam(required = false) String username,
+                                            @RequestParam(required = false) String name,
+                                            @RequestParam(required = false) String surname,
+                                            @RequestParam(required = false) OnlineStatus status) {
+
+        return DriverMapper.makeDriverDTOList(driverService.find(username, name, surname, status));
+    }
 }

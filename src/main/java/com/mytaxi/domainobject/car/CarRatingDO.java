@@ -3,8 +3,7 @@ package com.mytaxi.domainobject.car;
 import com.mytaxi.domainobject.AbstractDO;
 import com.mytaxi.domainvalue.Condition;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -18,13 +17,21 @@ import java.util.Date;
  */
 @Entity(name = "car_rating")
 @Table(schema = "sat", name = "car_rating")
-public class CarRating extends AbstractDO {
+public class CarRatingDO extends AbstractDO {
+    @Column(name = "driver_id")
     private Long driverId;
+    @Column(name = "car_id")
     private Long carId;
+    @Column(name = "rating_id")
     private Double rating;
+    @Column(name = "condition")
+    @Enumerated(EnumType.STRING)
     private Condition condition;
+    @Column(name = "comments")
     private String comments;
+    @Column(name = "created")
     private Date created;
+    @Column(name = "last_updated")
     private Date lastUpdated;
 
     public Long getDriverId() {

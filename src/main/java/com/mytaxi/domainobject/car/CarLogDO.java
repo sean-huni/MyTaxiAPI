@@ -17,31 +17,18 @@ import java.util.Date;
  */
 @Entity(name = "car_log")
 @Table(schema = "sat", name = "car_log")
-public class CarLog extends AbstractDO {
+public class CarLogDO extends AbstractDO {
     @Column(name = "driver_id")
     private Long driverId; //IN, OUT.
     @Column(name = "trip_status")
+    @Enumerated(EnumType.STRING)
     private TripStatus tripStatus; // BREAKDOWN, Completed, . capture the trip status
     @Column(name = "tot_distance")
     private Double totDistance;  //Distance travelled per trip.
     @Column(name = "comments")
     private String comments;
-    @Column(name = "")
+    @Column(name = "created")
     private Date created;
-
-    //    @ManyToOne(fetch = FetchType.EAGER)
-//        @JoinColumn(name = "car_id")
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @MapsId
-//    private CarDO carDO;
-
-//    public CarDO getCarDO() {
-//        return carDO;
-//    }
-//
-//    public void setCarDO(CarDO carDO) {
-//        this.carDO = carDO;
-//    }
 
     public Long getDriverId() {
         return driverId;

@@ -28,7 +28,7 @@ public class CarDoToCarDto implements Converter<CarDO, CarDTO> {
         CarDTO target = new CarDTO();
         target.setCarId(source.getId());
         target.setAverageRating(source.getAverageRating());
-        target.setCarStatus(source.getCarState().getCarStatus());
+        target.setCarStatus(source.getCarStateDO().getCarStatus());
         target.setLicensePlate(source.getLicenceNo());
         target.setMileage(source.getMileage());
         target.setNextService(source.getNextService());

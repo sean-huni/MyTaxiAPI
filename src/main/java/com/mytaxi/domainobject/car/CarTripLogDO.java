@@ -1,5 +1,6 @@
-package com.mytaxi.domainobject;
+package com.mytaxi.domainobject.car;
 
+import com.mytaxi.domainobject.AbstractDO;
 import com.mytaxi.domainvalue.GeoCoordinate;
 
 import javax.persistence.Entity;
@@ -21,13 +22,13 @@ import java.sql.Timestamp;
 ///////////////////////////////////////////////////////////////////////////
 @Entity(name = "trip_log")
 @Table(schema = "sat", name = "trip_log")
-public class TripLog extends AbstractDO {
+public class CarTripLogDO extends AbstractDO {
     private Long carLogId;
     private GeoCoordinate geoCoordinate;
     private Double distance; //Distance Travelled.
     private Timestamp timestamp;
 
-    public TripLog() {
+    public CarTripLogDO() {
         super();
     }
 

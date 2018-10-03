@@ -18,7 +18,7 @@ import java.util.Date;
  */
 @Entity(name = "car_state")
 @Table(schema = "sat", name = "car_state", uniqueConstraints = @UniqueConstraint(name = "uc_driver_id", columnNames = {"driver_id"}))
-public class CarState extends AbstractDO {
+public class CarStateDO extends AbstractDO {
     @Column(name = "driver_id")
     private Long driverId;
     @Column(name = "car_status", nullable = false)
@@ -36,7 +36,7 @@ public class CarState extends AbstractDO {
     @JoinColumn(name = "car_id")
     private CarDO carDO;
 
-    public CarState() {
+    public CarStateDO() {
         super();
     }
 
@@ -78,5 +78,16 @@ public class CarState extends AbstractDO {
 
     public void setCarDO(CarDO carDO) {
         this.carDO = carDO;
+    }
+
+    @Override
+    public String toString() {
+        return "CarStateDO{" +
+                "driverId=" + driverId +
+                ", carStatus=" + carStatus +
+                ", created=" + created +
+                ", updated=" + updated +
+                ", carDO=" + carDO +
+                '}';
     }
 }

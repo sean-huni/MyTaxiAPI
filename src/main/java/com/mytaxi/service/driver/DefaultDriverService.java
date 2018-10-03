@@ -6,12 +6,13 @@ import com.mytaxi.domainvalue.GeoCoordinate;
 import com.mytaxi.domainvalue.OnlineStatus;
 import com.mytaxi.exception.ConstraintsViolationException;
 import com.mytaxi.exception.EntityNotFoundException;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Service to encapsulate the link between DAO and controller and to have business logic for some driver specific things.
@@ -113,11 +114,17 @@ public class DefaultDriverService implements DriverService
         return driverRepository.findByOnlineStatus(onlineStatus);
     }
 
+    @Override
+    public List<DriverDO> find(String username, String name, String surname, OnlineStatus onlineStatus) {
+        return driverRepository.findAllByUsernameLikeOrFirstnameLikeOrSurnameLikeAndOnlineStatusLike(username, name, surname, onlineStatus);
+    }
+
 
     private DriverDO findDriverChecked(Long driverId) throws EntityNotFoundException
     {
         return driverRepository.findById(driverId)
             .orElseThrow(() -> new EntityNotFoundException("Could not find entity with id: " + driverId));
     }
+
 
 }

@@ -34,21 +34,22 @@ public class CarDO extends AbstractDO {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = false)
     @JoinColumn(name = "car_id")
-    private List<CarLog> carLogs = new ArrayList<>();
+    private List<CarLogDO> carLogDOS = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
-    private CarState carState;
+    @JoinColumn(name = "car_state_id")
+    private CarStateDO carStateDO;
 
     public CarDO() {
         super();
     }
 
-    public CarState getCarState() {
-        return carState;
+    public CarStateDO getCarStateDO() {
+        return carStateDO;
     }
 
-    public void setCarState(CarState carState) {
-        this.carState = carState;
+    public void setCarStateDO(CarStateDO carStateDO) {
+        this.carStateDO = carStateDO;
     }
 
     public CarTypeDO getCarType() {
@@ -59,12 +60,12 @@ public class CarDO extends AbstractDO {
         this.carType = carType;
     }
 
-    public List<CarLog> getCarLogs() {
-        return carLogs;
+    public List<CarLogDO> getCarLogDOS() {
+        return carLogDOS;
     }
 
-    public void setCarLogs(List<CarLog> carLogs) {
-        this.carLogs = carLogs;
+    public void setCarLogDOS(List<CarLogDO> carLogDOS) {
+        this.carLogDOS = carLogDOS;
     }
 
     public Double getAverageRating() {

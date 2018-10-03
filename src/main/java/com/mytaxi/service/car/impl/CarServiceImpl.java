@@ -5,8 +5,8 @@ import com.mytaxi.dataaccessobject.CarStateRepo;
 import com.mytaxi.datatransferobject.CarDTO;
 import com.mytaxi.domainobject.DriverDO;
 import com.mytaxi.domainobject.car.CarDO;
-import com.mytaxi.domainobject.car.CarLog;
-import com.mytaxi.domainobject.car.CarState;
+import com.mytaxi.domainobject.car.CarLogDO;
+import com.mytaxi.domainobject.car.CarStateDO;
 import com.mytaxi.domainvalue.CarStatus;
 import com.mytaxi.domainvalue.OnlineStatus;
 import com.mytaxi.domainvalue.Selection;
@@ -86,13 +86,15 @@ public class CarServiceImpl implements CarService {
             CarAlreadySelectedException, CarAlreadyInUseException, DriverNotOnlineException, NoCarSelectionException, CarUnavailableException, DeselectionNotAllowedException {
 
         DriverDO driverDO = driverService.find(driverId);
-        CarState carState = carStateRepo.findByCarDO_LicenceNo(licenceNo)
+        CarStateDO carStateDO = carStateRepo.findByCarDO_LicenceNo(licenceNo)
                 .orElseThrow(() -> new EntityNotFoundException(CAR_NOT_FOUND_EXCEPTION_MSG + licenceNo));
 
+        LOGGER.info("CarLog: " + carStateDO.toString());
+
         if (selection == Selection.SELECT) {
-            selectCar(driverDO, carState);
+            selectCar(driverDO, carStateDO);
         } else {
-            deselectCar(driverDO, carState);
+            deselectCar(driverDO, carStateDO);
         }
     }
 
@@ -134,10 +136,19 @@ public class CarServiceImpl implements CarService {
      * @return {@link List<CarDTO>}
      */
     @Override
-    public List<CarDTO> findAllCarsByStatus(CarStatus carStatus) {
-        Iterable<CarDO> allCars = carRepo.findByCarState_CarStatus(carStatus);
-        List<CarDTO> carDTOList = getCarDTOS(allCars);
-        return carDTOList;
+    public List<CarDTO> findAllCarsByStatus(CarStatus carStatus) throws EntityNotFoundException {
+        try {
+            Iterable<CarDO> allCars = carRepo.findByCarStateDO_CarStatus(carStatus);
+            List<CarDTO> carDTOList = getCarDTOS(allCars);
+            return carDTOList;
+        } catch (javax.persistence.EntityNotFoundException enf) {
+            LOGGER.warn("Record not found.", enf);
+            throw new EntityNotFoundException("Car Records not found.");
+        }
+    }
+
+    public List<CarDTO> findCarCharacteristics(String licenceNo, String make, String model, Integer seatCount) {
+        return getCarDTOS(carRepo.findAllByLicenceNoLikeOrCarType_MakeOrCarType_ModelOrCarType_SeatCount(licenceNo, make, model, seatCount));
     }
 
     private List<CarDTO> getCarDTOS(Iterable<CarDO> allCars) {
@@ -147,16 +158,16 @@ public class CarServiceImpl implements CarService {
     }
 
 
-    private void selectCar(DriverDO driverDO, CarState carState) throws CarAlreadySelectedException, CarAlreadyInUseException,
+    private void selectCar(DriverDO driverDO, CarStateDO carStateDO) throws CarAlreadySelectedException, CarAlreadyInUseException,
             DriverNotOnlineException, CarUnavailableException, NoCarSelectionException {
 
-        validateCarSelectionRules(driverDO, carState);
+        validateCarSelectionRules(driverDO, carStateDO);
 
         //Save Selected Car.
-        carStateRepo.save(carState);
+        carStateRepo.save(carStateDO);
     }
 
-    private void validateCarSelectionRules(DriverDO driverDO, CarState carState) throws CarAlreadySelectedException, CarAlreadyInUseException,
+    private void validateCarSelectionRules(DriverDO driverDO, CarStateDO carStateDO) throws CarAlreadySelectedException, CarAlreadyInUseException,
             DriverNotOnlineException, CarUnavailableException, NoCarSelectionException {
 
         boolean isDriverOnline = driverDO.getOnlineStatus() == OnlineStatus.ONLINE;
@@ -166,45 +177,45 @@ public class CarServiceImpl implements CarService {
         }
 
 
-        if (null == carState.getCarStatus()) {
+        if (null == carStateDO.getCarStatus()) {
             throw new NoCarSelectionException(NO_CAR_SELECTED_EXCEPTION_MSG);
-        } else if (carState.getCarStatus() == CarStatus.IN_USE && driverDO.getId().equals(carState.getDriverId())) {
+        } else if (carStateDO.getCarStatus() == CarStatus.IN_USE && driverDO.getId().equals(carStateDO.getDriverId())) {
             /*
              * Todo: Consider adding a new table 1-1 Rel that keeps track of which driver is using the car.
              */
             throw new CarAlreadySelectedException(CAR_ALREADY_SELECTED_EXCEPTION_MSG);
-        } else if (carState.getCarStatus() == CarStatus.UNAVAILABLE) {
+        } else if (carStateDO.getCarStatus() == CarStatus.UNAVAILABLE) {
             throw new CarUnavailableException(CAR_UNAVAILABLE_EXCEPTION_MSG);
-        } else if (carState.getCarStatus() == CarStatus.IN_USE) {
+        } else if (carStateDO.getCarStatus() == CarStatus.IN_USE) {
             throw new CarAlreadyInUseException(CAR_IN_USE_EXCEPTION_MSG);
         } else {
-            CarLog log = new CarLog();
+            CarLogDO log = new CarLogDO();
             log.setDriverId(driverDO.getId());
             log.setCreated(new Date());
             log.setComments("Driver selected vehicle.");
 
-            carState.setDriverId(driverDO.getId());
-            carState.setCarStatus(CarStatus.IN_USE);
-            carState.setUpdated(new Date());
-            carState.getCarDO().getCarLogs().add(log);
+            carStateDO.setDriverId(driverDO.getId());
+            carStateDO.setCarStatus(CarStatus.IN_USE);
+            carStateDO.setUpdated(new Date());
+            carStateDO.getCarDO().getCarLogDOS().add(log);
         }
     }
 
 
-    private void deselectCar(DriverDO driverDO, CarState carState) throws DeselectionNotAllowedException {
+    private void deselectCar(DriverDO driverDO, CarStateDO carStateDO) throws DeselectionNotAllowedException {
 
-        if (!driverDO.getId().equals(carState.getDriverId())) {
+        if (!driverDO.getId().equals(carStateDO.getDriverId())) {
             throw new DeselectionNotAllowedException(CAR_DESELECTION_EXCEPTION_MSG);
         }
 
-        CarLog log = new CarLog();
+        CarLogDO log = new CarLogDO();
         log.setDriverId(driverDO.getId());
         log.setCreated(new Date());
         log.setComments("Driver deselected vehicle.");
 
-        carState.setDriverId(null);
-        carState.setCarStatus(CarStatus.READY);
-        carState.setUpdated(new Date());
-        carState.getCarDO().getCarLogs().add(log);
+        carStateDO.setDriverId(null);
+        carStateDO.setCarStatus(CarStatus.READY);
+        carStateDO.setUpdated(new Date());
+        carStateDO.getCarDO().getCarLogDOS().add(log);
     }
 }

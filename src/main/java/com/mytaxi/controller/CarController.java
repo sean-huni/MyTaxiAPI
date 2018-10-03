@@ -34,7 +34,7 @@ public class CarController {
     }
 
     @GetMapping
-    public List<CarDTO> findCarsByStatus(@RequestParam(required = false) CarStatus carStatus) {
+    public List<CarDTO> findCarsByStatus(@RequestParam(required = false) CarStatus carStatus) throws EntityNotFoundException {
         LOGGER.info("findCarsByStatus: " + carStatus);
         if (null == carStatus) {
             return carService.findAllCars();
@@ -44,18 +44,25 @@ public class CarController {
 
     @GetMapping("/{licenceNo}")
     public CarDTO findCarByLicenceNo(@PathVariable String licenceNo) throws EntityNotFoundException {
-        //Logic to find car.
-//        carService
         return carService.findCarByLicenceNo(licenceNo);
     }
 
-    @PutMapping("/select/{licenceNo}/{driverId}") //1,000,000,000,000,000,000
+    @PutMapping("/select/{licenceNo}/{driverId}")
     @ResponseStatus(HttpStatus.CREATED)
     public void toggleCarByLicenceNo(@PathVariable Long driverId,
                                      @RequestParam Selection selection,
                                      @PathVariable String licenceNo) throws EntityNotFoundException,
             CarAlreadyInUseException, CarAlreadySelectedException, CarAlreadyDeselectedException, DriverNotOnlineException, CarUnavailableException, DeselectionNotAllowedException, NoCarSelectionException {
-        // Route to the .
         carService.toggleCar(driverId, licenceNo, selection);
     }
+
+
+    @GetMapping("/find-cars")
+    public List<CarDTO> carDTOList(@RequestParam String licenceNo,
+                                   @RequestParam String make,
+                                   @RequestParam String model,
+                                   @RequestParam Integer seatCount) {
+        return carService.findCarCharacteristics(licenceNo, make, model, seatCount);
+    }
+
 }

@@ -4,6 +4,7 @@ import com.mytaxi.domainobject.car.CarDO;
 import com.mytaxi.domainvalue.CarStatus;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -18,5 +19,7 @@ import java.util.Optional;
 public interface CarRepo extends CrudRepository<CarDO, Long> {
     Optional<CarDO> findByLicenceNo(String licencePlate);
 
-    Iterable<CarDO> findByCarState_CarStatus(CarStatus carStatus);
+    Iterable<CarDO> findByCarStateDO_CarStatus(CarStatus carStatus);
+
+    List<CarDO> findAllByLicenceNoLikeOrCarType_MakeOrCarType_ModelOrCarType_SeatCount(String licenceNo, String make, String model, Integer seatCount);
 }

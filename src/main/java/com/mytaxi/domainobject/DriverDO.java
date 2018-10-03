@@ -11,6 +11,13 @@ import java.time.ZonedDateTime;
 @Entity
 @Table(schema = "sat", name = "driver", uniqueConstraints = @UniqueConstraint(name = "uc_username", columnNames = {"username"}))
 public class DriverDO extends AbstractDO {
+    @Column(nullable = false)
+    @NotNull(message = "First-name can not be null!")
+    private String firstname;
+
+    @Column(nullable = false)
+    @NotNull(message = "Surname can not be null!")
+    private String surname;
 
     @Column(nullable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -52,6 +59,26 @@ public class DriverDO extends AbstractDO {
         this.coordinate = null;
         this.dateCoordinateUpdated = null;
         this.onlineStatus = OnlineStatus.OFFLINE;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getUsername() {
