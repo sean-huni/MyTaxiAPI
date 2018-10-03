@@ -31,7 +31,7 @@ You should commit into your local git repository and include the commit history 
 ## Task 1
  * Write a new Controller for maintaining cars (CRUD).
    * Decide on your own how the methods should look like.
-   * Entity Car: Should have at least the following characteristics: license_plate, seat_count, convertible, rating, engine_type (electric, gas, ...)
+   * Entity Car: Should have at least the following characteristics: license_plate, seat_count, convertible, averageRating, engine_type (electric, gas, ...)
    * Entity Manufacturer: Decide on your own if you will use a new table or just a string column in the car table.
  * Extend the DriverController to enable drivers to select a car they are driving with.
  * Extend the DriverController to enable drivers to deselect a car.
@@ -48,7 +48,7 @@ First come first serve: A car can be selected by exactly one ONLINE Driver. If a
 
 
 ## Task 3
-Imagine a driver management frontend that is used internally by mytaxi employees to create and edit driver related data. For a new search functionality, we need an endpoint to search for drivers. It should be possible to search for drivers by their attributes (username, online_status) as well as car characteristics (license plate, rating, etc).
+Imagine a driver management frontend that is used internally by mytaxi employees to create and edit driver related data. For a new search functionality, we need an endpoint to search for drivers. It should be possible to search for drivers by their attributes (username, online_status) as well as car characteristics (license plate, averageRating, etc).
 
 * implement a new endpoint for searching or extend an existing one
 * driver/car attributes as input parameters
