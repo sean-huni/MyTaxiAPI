@@ -1,4 +1,4 @@
-package com.mytaxi.service.car;
+package com.mytaxi.service.persistence.car;
 
 import com.mytaxi.datatransferobject.CarDTO;
 import com.mytaxi.domainvalue.CarStatus;

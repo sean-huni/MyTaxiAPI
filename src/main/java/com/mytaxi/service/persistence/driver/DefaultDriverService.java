@@ -1,4 +1,4 @@
-package com.mytaxi.service.driver;
+package com.mytaxi.service.persistence.driver;
 
 import com.mytaxi.dataaccessobject.DriverRepository;
 import com.mytaxi.domainobject.DriverDO;

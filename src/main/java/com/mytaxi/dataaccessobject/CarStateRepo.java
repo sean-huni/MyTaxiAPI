@@ -1,7 +1,7 @@
 package com.mytaxi.dataaccessobject;
 
 import com.mytaxi.domainobject.car.CarStateDO;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
@@ -14,6 +14,6 @@ import java.util.Optional;
  * E-MAIL    : kudzai@bcs.org
  * CELL      : +27-64-906-8809
  */
-public interface CarStateRepo extends CrudRepository<CarStateDO, Long> {
+public interface CarStateRepo extends JpaRepository<CarStateDO, Long> {
     Optional<CarStateDO> findByCarDO_LicenceNo(String licenceNo);
 }

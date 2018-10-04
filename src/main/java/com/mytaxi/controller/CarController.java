@@ -4,11 +4,12 @@ import com.mytaxi.datatransferobject.CarDTO;
 import com.mytaxi.domainvalue.CarStatus;
 import com.mytaxi.domainvalue.Selection;
 import com.mytaxi.exception.*;
-import com.mytaxi.service.car.CarService;
+import com.mytaxi.service.persistence.car.CarService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("v1/cars")
+@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 public class CarController {
     private static final Logger LOGGER = LoggerFactory.getLogger(CarController.class);
     private final CarService carService;

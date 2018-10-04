@@ -1,4 +1,4 @@
-package com.mytaxi.service.car.impl;
+package com.mytaxi.service.persistence.car.impl;
 
 import com.mytaxi.dataaccessobject.CarRepo;
 import com.mytaxi.dataaccessobject.CarStateRepo;
@@ -11,8 +11,8 @@ import com.mytaxi.domainvalue.CarStatus;
 import com.mytaxi.domainvalue.OnlineStatus;
 import com.mytaxi.domainvalue.Selection;
 import com.mytaxi.exception.*;
-import com.mytaxi.service.car.CarService;
-import com.mytaxi.service.driver.DriverService;
+import com.mytaxi.service.persistence.car.CarService;
+import com.mytaxi.service.persistence.driver.DriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,18 +49,15 @@ public class CarServiceImpl implements CarService {
     private static final String CAR_DESELECTION_EXCEPTION_MSG = "Not allowed to deselect a car that is not assigned to the driver.";
     private final DriverService driverService;
     private final CarStateRepo carStateRepo;
-    private final Converter carDTOtoDO;
     private final Converter carDOtoDTO;
     private CarRepo carRepo;
 
     @Autowired
     public CarServiceImpl(CarRepo carRepo, final DriverService driverService, final CarStateRepo carStateRepo,
-                          @Qualifier("carDtoToCarDO") final Converter carDTOtoDO,
                           @Qualifier("carDOtoDTO") final Converter carDOtoDTO) {
         this.carRepo = carRepo;
         this.driverService = driverService;
         this.carStateRepo = carStateRepo;
-        this.carDTOtoDO = carDTOtoDO;
         this.carDOtoDTO = carDOtoDTO;
     }
 

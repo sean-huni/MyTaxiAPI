@@ -4,6 +4,22 @@
 SET FOREIGN_KEY_CHECKS = 0;
 -- Create 3 OFFLINE drivers
 
+insert into sat.user (id, name, username, password, enabled, last_updated)
+values (1,
+        'admin',
+        'admin-one',
+        '$2a$10$.Q3ZF/7kP7E.qrDmCs9NneGaaO7lSQi0cA.V8IksGScOpQuGktxv.',
+        true,
+        now()); -- password: password
+
+insert into sat.user (id, name, username, password, enabled, last_updated)
+values (2,
+        'user',
+        'user-one',
+        '$2a$10$.Q3ZF/7kP7E.qrDmCs9NneGaaO7lSQi0cA.V8IksGScOpQuGktxv.',
+        true,
+        now()); -- password: password
+
 insert into sat.driver (id, date_created, deleted, online_status, password, username, firstname, surname)
 values (1, now(), false, 'OFFLINE', 'driver01pw', 'driver01', 'Kai', 'Sun');
 
