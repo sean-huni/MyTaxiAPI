@@ -3,31 +3,27 @@ package com.mytaxi.service.security.impl;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.mytaxi.service.security.LoginAttemptService;
-import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 /**
  * PROJECT   : server-applicant-test-18
- * PACKAGE   : com.mytaxi.service.auth
+ * PACKAGE   : com.mytaxi.service.security.impl
  * USER      : sean
- * DATE      : 03-Wed-Oct-2018
- * TIME      : 23:15
+ * DATE      : 08-Mon-Oct-2018
+ * TIME      : 01:23
  * E-MAIL    : kudzai@bcs.org
  * CELL      : +27-64-906-8809
  */
-@Service
-public class LoginAttemptServiceImpl implements LoginAttemptService {
-
-    private final int MAX_ATTEMPT = 3;
+public class LoginAttempts {
+    private final int MAX_ATTEMPT;
     private LoadingCache<String, Integer> attemptsCache;
 
-    public LoginAttemptServiceImpl() {
-        super();
+    public LoginAttempts(int MAX_ATTEMPT, long duration, TimeUnit timeUnit) {
+        this.MAX_ATTEMPT = MAX_ATTEMPT;
         attemptsCache = CacheBuilder.newBuilder().
-                expireAfterWrite(1, TimeUnit.DAYS).build(new CacheLoader<String, Integer>() {
+                expireAfterWrite(duration, timeUnit).build(new CacheLoader<String, Integer>() {
             public Integer load(String key) {
                 return 0;
             }

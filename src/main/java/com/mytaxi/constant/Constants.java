@@ -34,7 +34,7 @@ public class Constants {
             URL_RESOURCES_STATIC, URL_RESOURCES_WEBJAR, URL_RESOURCES_H2}; //URL_ROOT
     private static final String URL_INTERNAL_RESOURCES_PUB = "classpath:/public/";
     public static final String SECURITY_PERMIT_ALL_URLS = Arrays.toString(
-            new String[]{URL_RESOURCES_H2, URL_INTERNAL_RESOURCES_PUB, URL_INVALID_SESSION, URL_RESOURCES_SWAGGER, "/"})
+            new String[]{URL_RESOURCES_H2, URL_INTERNAL_RESOURCES_PUB, URL_INVALID_SESSION, URL_RESOURCES_SWAGGER, "/", "/error", "/templates/404.html", "/static/**"})
             .replace("[", "").replace("]", "");
     private static final String URL_INTERNAL_RESOURCES_STATIC = "classpath:/static/";
     private static final String URL_INTERNAL_RESOURCES_WEBJAR = "classpath:/webjars/";

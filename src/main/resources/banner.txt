@@ -1,0 +1,13 @@
+Artwork:
+
+ooo        ooooo             ooooooooooooo                        o8o                .o.
+`88.       .888'             8'   888   `8                        `"'               .888.
+ 888b     d'888  oooo    ooo      888       .oooo.   oooo    ooo oooo              .8"888.     oo.ooooo.  oo.ooooo.
+ 8 Y88. .P  888   `88.  .8'       888      `P  )88b   `88b..8P'  `888             .8' `888.     888' `88b  888' `88b
+ 8  `888'   888    `88..8'        888       .oP"888     Y888'     888  8888888   .88ooo8888.    888   888  888   888
+ 8    Y     888     `888'         888      d8(  888   .o8"'88b    888           .8'     `888.   888   888  888   888
+o8o        o888o     .8'         o888o     `Y888""8o o88'   888o o888o         o88o     o8888o  888bod8P'  888bod8P'
+                 .o..P'                                                                         888        888
+                 `Y8P'                                                                         o888o      o888o
+
+                                      @Copyright: Kudzai Sean Huni, 2018.

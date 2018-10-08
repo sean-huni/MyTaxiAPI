@@ -2,6 +2,7 @@ package com.mytaxi.service.security.impl;
 
 import com.mytaxi.dataaccessobject.UserRepo;
 import com.mytaxi.domainobject.UserDO;
+import com.mytaxi.exception.AccountSecurityException;
 import com.mytaxi.service.security.LoginAttemptService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,12 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,14 +37,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
     private boolean isAdmin = false;
     private UserRepo userRepo;
-    private HttpServletRequest request;
     private LoginAttemptService loginAttemptService;
 
     @Autowired
-    public UserDetailsServiceImpl(HttpServletRequest request, final LoginAttemptService loginAttemptService, UserRepo userRepo) {
-        this.request = request;
-        this.loginAttemptService = loginAttemptService;
+    public UserDetailsServiceImpl(UserRepo userRepo, @Qualifier("userAccount") LoginAttemptService loginAttemptService) {
         this.userRepo = userRepo;
+        this.loginAttemptService = loginAttemptService;
     }
 
     /**
@@ -59,10 +58,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      *                                   GrantedAuthority
      */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, SecurityException {
-        String ip = getClientIP(request);
-        if (loginAttemptService.isBlocked(ip)) {
-            throw new SecurityException("User is blocked. Too many login attempts");
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        if (loginAttemptService.isBlocked(username)) {
+            LOGGER.warn("Username {} is blocked...", username);
+            throw new AccountSecurityException("Your account is blocked. Too many failed login attempts");
         }
 
         Optional<UserDO> userOptional = Optional.ofNullable(userRepo.findByUsername(username));
@@ -73,7 +73,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("Username & Password doesn't exist!");
         }
 
-        return new org.springframework.security.core.userdetails.User(userOptional.get().getUsername(), userOptional.get().getPassword(), authorizeNewUser());
+        return new User(userOptional.get().getUsername(), userOptional.get().getPassword(), authorizeNewUser());
     }
 
     private List<GrantedAuthority> authorizeNewUser() {
@@ -82,26 +82,5 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         authorities.add(new SimpleGrantedAuthority(USER_ROLE_PREFIX + postfix));
 
         return authorities;
-    }
-
-    private String getClientIP(HttpServletRequest request) {
-        String clientIP;
-        String xfHeader = "";
-
-        try {
-            xfHeader = request.getHeader("X-Fowarded-For");
-        } catch (IllegalStateException e) {
-            LOGGER.warn("Could not process: request.getHeader(\"X-Fowarded-For\")");
-        }
-
-        if (xfHeader == null) {
-            String remoteIP = request.getRemoteAddr();
-            LOGGER.info("Remote-IP: {}", remoteIP);
-            return remoteIP;
-        }
-
-        clientIP = xfHeader.split(",")[0];
-        LOGGER.info("Client-IP: {}", clientIP);
-        return clientIP;
     }
 }

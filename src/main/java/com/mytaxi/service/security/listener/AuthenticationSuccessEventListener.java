@@ -2,6 +2,7 @@ package com.mytaxi.service.security.listener;
 
 import com.mytaxi.service.security.LoginAttemptService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
@@ -21,7 +22,7 @@ public class AuthenticationSuccessEventListener implements ApplicationListener<A
     private final LoginAttemptService loginAttemptService;
 
     @Autowired
-    public AuthenticationSuccessEventListener(final LoginAttemptService loginAttemptService) {
+    public AuthenticationSuccessEventListener(@Qualifier("clientIPAddress") final LoginAttemptService loginAttemptService) {
         this.loginAttemptService = loginAttemptService;
     }
 

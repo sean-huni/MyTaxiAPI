@@ -1,7 +1,9 @@
 package com.mytaxi.service.security.listener;
 
+import com.mytaxi.exception.AccountSecurityException;
 import com.mytaxi.service.security.LoginAttemptService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
@@ -18,17 +20,21 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AuthenticationFailureListener implements ApplicationListener<AuthenticationFailureBadCredentialsEvent> {
-    private LoginAttemptService loginAttemptService;
+    private final LoginAttemptService loginAttemptService;
 
     @Autowired
-    public AuthenticationFailureListener(LoginAttemptService loginAttemptService) {
+    public AuthenticationFailureListener(@Qualifier("clientIPAddress") final LoginAttemptService loginAttemptService) {
         this.loginAttemptService = loginAttemptService;
     }
 
     @Override
-    public void onApplicationEvent(AuthenticationFailureBadCredentialsEvent authenticationFailureBadCredentialsEvent) {
+    public void onApplicationEvent(AuthenticationFailureBadCredentialsEvent authenticationFailureBadCredentialsEvent) throws AccountSecurityException {
         WebAuthenticationDetails auth = (WebAuthenticationDetails) authenticationFailureBadCredentialsEvent.getAuthentication().getDetails();
 
         loginAttemptService.loginFailed(auth.getRemoteAddress());
+
+        if (loginAttemptService.isBlocked(auth.getRemoteAddress())) {
+            throw new AccountSecurityException("Your IP-Address is blocked. Too many login attempts...");
+        }
     }
 }

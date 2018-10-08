@@ -1,12 +1,9 @@
 package com.mytaxi.config;
 
-import com.mytaxi.controller.HomeController;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import static com.mytaxi.constant.Constants.EXTERNAL_URL_RESOURCES;
 import static com.mytaxi.constant.Constants.INTERNAL_URL_RESOURCES;
@@ -22,7 +19,6 @@ import static com.mytaxi.constant.Constants.INTERNAL_URL_RESOURCES;
  */
 @EnableWebMvc
 @Configuration
-@ComponentScan(basePackageClasses = HomeController.class)
 public class WebConfig implements WebMvcConfigurer {
 
     /**
@@ -43,5 +39,19 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
+    }
+
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("templates/404.html").setViewName("404");
+    }
+
+    @Bean
+    public InternalResourceViewResolver internalResourceViewResolver() {
+        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+        resolver.setPrefix("/templates");
+        resolver.setSuffix(".html");
+        return resolver;
     }
 }
