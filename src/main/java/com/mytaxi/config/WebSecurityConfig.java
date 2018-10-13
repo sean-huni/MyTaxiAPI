@@ -81,7 +81,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutUrl(URL_LOGOUT)
-                .logoutSuccessUrl("/login")
+                .logoutSuccessUrl("/")
                 .deleteCookies(COOKIES_SESSION).clearAuthentication(true)
                 .and()
                 .rememberMe().rememberMeCookieName(COOKIE_REMEMBER_ME).tokenValiditySeconds(1200)

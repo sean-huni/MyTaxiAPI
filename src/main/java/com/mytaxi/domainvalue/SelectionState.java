@@ -9,6 +9,6 @@ package com.mytaxi.domainvalue;
  * E-MAIL    : kudzai@bcs.org
  * CELL      : +27-64-906-8809
  */
-public enum Selection {
+public enum SelectionState {
     SELECT, DESELECT
 }

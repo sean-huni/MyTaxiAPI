@@ -43,7 +43,7 @@ public class LoginAttempts {
 
     @AfterReturning(value = "com.mytaxi.aop.security.LoginAttempts.doAuthenticate()", returning = "authentication")
     public void logAfter(Authentication authentication) {
-        String username = (String) authentication.getPrincipal();
+        String username = String.valueOf(authentication.getPrincipal());
 
         if (authentication.isAuthenticated()) {
             loginAttemptService.loginSucceeded(username);

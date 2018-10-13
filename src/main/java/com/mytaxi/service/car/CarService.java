@@ -1,8 +1,8 @@
-package com.mytaxi.service.persistence.car;
+package com.mytaxi.service.car;
 
 import com.mytaxi.datatransferobject.CarDTO;
 import com.mytaxi.domainvalue.CarStatus;
-import com.mytaxi.domainvalue.Selection;
+import com.mytaxi.domainvalue.SelectionState;
 import com.mytaxi.exception.*;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public interface CarService {
      * @throws CarAlreadyInUseException      if the car is in use by another driver.
      * @throws CarAlreadyDeselectedException if the driver has already deselected the same car.
      */
-    void toggleCar(Long driverId, String licenceNo, Selection selection) throws EntityNotFoundException,
+    void toggleCar(Long driverId, String licenceNo, SelectionState selectionState) throws EntityNotFoundException,
             CarAlreadySelectedException, CarAlreadyInUseException, CarAlreadyDeselectedException, DriverNotOnlineException, NoCarSelectionException, CarUnavailableException, DeselectionNotAllowedException;
 
     /**

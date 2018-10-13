@@ -1,4 +1,4 @@
-package com.mytaxi.service.persistence.driver;
+package com.mytaxi.service.driver;
 
 import com.mytaxi.domainobject.DriverDO;
 import com.mytaxi.domainvalue.OnlineStatus;
