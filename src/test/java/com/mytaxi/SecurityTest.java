@@ -39,6 +39,10 @@ public class SecurityTest {
     private static final String THROWN_ERROR_MSG = "Request processing failed; nested exception is org.springframework.security.authentication.AuthenticationCredentialsNotFoundException: An Authentication object was not found in the SecurityContext";
     private static final Logger LOGGER = LoggerFactory.getLogger(CarControllerIntTest.class);
 
+    /*
+        TEST THE ENDPOINTS TO AVOID UNAUTHENTICATED ACCESS.
+     */
+
     @Autowired
     private WebApplicationContext wac;
     private MockMvc mockMvc;
