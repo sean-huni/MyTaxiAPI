@@ -71,6 +71,7 @@ public class SecurityTest {
                 -> mockMvc.perform(get("/v1/drivers/5").contentType("application/json;charset=UTF-8")).andDo(print())
                 .andExpect(status().isOk()));
 
+        assertNotNull(exception);
         assertEquals(THROWN_ERROR_MSG, exception.getMessage());
         assertNotNull(exception.getMessage());
         assertTrue(exception.getMessage().contains("AuthenticationCredentialsNotFoundException"));
@@ -86,6 +87,7 @@ public class SecurityTest {
                 -> mockMvc.perform(get("/v1/cars/303-707").contentType("application/json;charset=UTF-8")).andDo(print())
                 .andExpect(status().isOk()));
 
+        assertNotNull(exception);
         assertEquals(THROWN_ERROR_MSG, exception.getMessage());
         assertNotNull(exception.getMessage());
         assertTrue(exception.getMessage().contains("AuthenticationCredentialsNotFoundException"));
